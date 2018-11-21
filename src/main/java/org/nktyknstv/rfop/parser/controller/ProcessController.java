@@ -133,6 +133,10 @@ public class ProcessController {
         result.setNewEntities(newSeminars.stream().map(BaseEntity::getUrl).collect(Collectors.joining("\n")));
         result.setDeletedEntities(deletedSeminars.stream().map(BaseEntity::getUrl).collect(Collectors.joining("\n")));
         result.setUpdatedEntities(updatedSeminars.stream().map(BaseEntity::getUrl).collect(Collectors.joining("\n")));
+
+        inspectionDescription.append(prepareLinksReport("Добавлен", newSeminars));
+        inspectionDescription.append(prepareLinksReport("Удален", deletedSeminars));
+
         result.setDescription(inspectionDescription.toString());
         inspectionResults.add(inspectionService.saveInspectionResult(result));
         return ResponseEntity.ok(inspectionResults);
@@ -145,13 +149,21 @@ public class ProcessController {
             report.append(String.format("Семинар %s - изменение дат. Было: %s, стало: %s\n", existingSeminar.getUrl(), existingSeminar.getDate(), newSeminar.getDate()));
         }
         if (!existingSeminar.getDescription().equals(newSeminar.getDescription())) {
-            report.append(String.format("Семинар %s - изменение описания. Было: %s, стало: %s\n", existingSeminar.getUrl(), existingSeminar.getDescription(), newSeminar.getDescription()));
+            report.append(String.format("Семинар %s - изменение описания.\n", existingSeminar.getUrl()));
         }
         if (!existingSeminar.getAgenda().equals(newSeminar.getAgenda())) {
             report.append(String.format("Семинар %s - изменение программы.\n", existingSeminar.getUrl()));
         }
         if (!existingSeminar.getSpeakers().equals(newSeminar.getSpeakers())) {
             report.append(String.format("Семинар %s - изменение лекторов. Было: %s, стало: %s\n", existingSeminar.getUrl(), existingSeminar.getSpeakers(), newSeminar.getSpeakers()));
+        }
+        return report.toString();
+    }
+
+    private String prepareLinksReport(String action, List<Seminar> list) {
+        StringBuilder report = new StringBuilder("\n\n");
+        for (Seminar seminar : list) {
+            report.append(String.format("%s семинар %s (%s)\n", action, seminar.getUrl(), seminar.getName()));
         }
         return report.toString();
     }
