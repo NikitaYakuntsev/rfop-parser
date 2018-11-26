@@ -65,7 +65,7 @@ public class ProcessController {
                         seminar.setActual(true);
                         return seminar;
                     })
-                    .filter(distinctByKey(Seminar::getCode))
+                    .filter(distinctByKey(s -> s.getUrl().substring(s.getUrl().lastIndexOf('/'))))
                     .collect(Collectors.toList());
 
             seminarRepository.save(seminars);
@@ -83,20 +83,29 @@ public class ProcessController {
         for (Category category : all) {
             processed.addAll(categoryProcessor.process(category));
         }
-        seminarRepository.setActualFalse();
+
+//        seminarRepository.setActualFalse();
+        List<Seminar> presentSeminars = seminarRepository.findAllByDeletedFalse();
+        presentSeminars.forEach(s -> s.setActual(false));
+        seminarRepository.save(presentSeminars);
+        seminarRepository.flush();
+
+        List<Seminar> allNonActual = seminarRepository.findAll(); //for debug purposes only
+
         List<Seminar> seminars = processed.stream()
                 .map(p -> {
                     Seminar seminar = (Seminar) p;
                     return seminar;
                 })
-                .filter(distinctByKey(Seminar::getCode))
+                .filter(distinctByKey(s -> s.getUrl().substring(s.getUrl().lastIndexOf('/'))))
                 .collect(Collectors.toList());
         List<Seminar> newSeminars = new ArrayList<>();
         List<Seminar> updatedSeminars = new ArrayList<>();
         List<Seminar> deletedSeminars = new ArrayList<>();
         StringBuilder inspectionDescription = new StringBuilder();
         for (Seminar seminar : seminars) {
-            Optional<Seminar> existingSeminarOpt = seminarRepository.findByCode(seminar.getCode());
+            String urlCode = seminar.getUrl().substring(seminar.getUrl().lastIndexOf('/'));
+            Optional<Seminar> existingSeminarOpt = seminarRepository.findByCode(urlCode);
             if (!existingSeminarOpt.isPresent()) {
                 seminar.setActual(true);
                 Seminar newSeminar = seminarRepository.save(seminar);
@@ -125,6 +134,9 @@ public class ProcessController {
                 }
             }
         }
+        seminarRepository.flush();
+        List<Seminar> allProcessed = seminarRepository.findAll(); //for debug
+
         List<Seminar> removed = seminarRepository.findAllByActualFalseAndDeletedFalse();
         removed.forEach(r -> r.setActual(true));
         deletedSeminars.addAll(seminarRepository.save(removed));

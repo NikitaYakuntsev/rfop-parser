@@ -14,7 +14,11 @@ public interface SeminarRepository extends JpaRepository<Seminar, String> {
     @Query("update Seminar s set s.actual = false where s.deleted = false")
     void setActualFalse();
 
+    List<Seminar> findAllByDeletedFalse();
+
     List<Seminar> findAllByActualFalseAndDeletedFalse();
 
+    @Query(nativeQuery = true,
+    value = "select * from seminar where url like '%' || ?")
     Optional<Seminar> findByCode(String code);
 }
