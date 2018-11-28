@@ -139,6 +139,7 @@ public class ProcessController {
 
         List<Seminar> removed = seminarRepository.findAllByActualFalseAndDeletedFalse();
         removed.forEach(r -> r.setActual(true));
+        removed.forEach(r -> r.setDeleted(true));
         deletedSeminars.addAll(seminarRepository.save(removed));
 
         InspectionResult result = new InspectionResult();
