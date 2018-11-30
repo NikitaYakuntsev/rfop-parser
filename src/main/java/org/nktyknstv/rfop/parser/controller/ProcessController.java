@@ -151,8 +151,8 @@ public class ProcessController {
         inspectionDescription.append(prepareLinksReport("Удален", deletedSeminars));
 
         result.setDescription(inspectionDescription.toString());
-        inspectionResults.add(inspectionService.saveInspectionResult(result));
-        return ResponseEntity.ok(inspectionResults);
+//        inspectionResults.add();
+        return ResponseEntity.ok(inspectionService.saveInspectionResult(result));
     }
 
     private String compareSeminars(Seminar existingSeminar, Seminar newSeminar) {

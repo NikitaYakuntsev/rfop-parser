@@ -34,12 +34,19 @@ public class CategoryProcessor extends BaseProcessor {
 
     @Override
     public List<BaseEntity> process(BaseEntity entity) throws Exception {
-        Integer pageNum = 1;
+        Integer pageNum = 0;
         Map<Integer, Elements> seminars = new HashMap<Integer, Elements>();
 
         while (true) {
-            Document page = Jsoup.connect(String.format(entity.getUrl(), pageNum)).get();
-            if (!getPageNumber(page).equals(pageNum)) {
+            String url = entity.getUrl();
+            if (pageNum == 0) {
+                url = url.substring(0, url.lastIndexOf("/"));
+            } else {
+                url = String.format(entity.getUrl(), pageNum);
+            }
+
+            Document page = Jsoup.connect(url).get();
+            if (!getPageNumber(page).equals(pageNum) && pageNum != 0) {
                 break;
             }
             seminars.put(pageNum, page.select(".table-hover").iterator().next().getElementsByTag("tbody").iterator().next().children());
