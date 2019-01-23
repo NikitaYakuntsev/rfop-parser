@@ -8,6 +8,15 @@
     <artifactId>rfop-parser</artifactId>
     <version>1.0.1</version>
     <build>
+        <resources>
+            <resource>
+                <filtering>true</filtering>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>application.properties</include>
+                </includes>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -117,16 +126,6 @@
 
 
     </dependencies>
-
-    <resources>
-        <resource>
-            <filtering>true</filtering>
-            <directory>src/main/resources</directory>
-            <includes>
-                <include>application.properties</include>
-            </includes>
-        </resource>
-    </resources>
 
 
 </project>
