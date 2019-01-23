@@ -42,6 +42,8 @@
         <sqlite-dialect.version>1.0</sqlite-dialect.version>
         <jsoup.version>1.7.2</jsoup.version>
         <commons-lang3.version>3.8.1</commons-lang3.version>
+        <papertrail.version>1.0.0</papertrail.version>
+        <guava.version>20.0</guava.version>
     </properties>
 
     <parent>
@@ -100,6 +102,17 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>${commons-lang3.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.papertrailapp</groupId>
+            <artifactId>logback-syslog4j</artifactId>
+            <version>${papertrail.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
         </dependency>
 
 

@@ -1,5 +1,6 @@
 package org.nktyknstv.rfop.parser.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.nktyknstv.rfop.parser.entity.BaseEntity;
 import org.nktyknstv.rfop.parser.entity.Category;
 import org.nktyknstv.rfop.parser.entity.InspectionResult;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/")
+@Slf4j
 public class ProcessController {
 
     @Resource
@@ -80,9 +82,11 @@ public class ProcessController {
         List<Category> all = categoryRepository.findAll();
         List<InspectionResult> inspectionResults = new ArrayList<>();
         List<BaseEntity> processed = new ArrayList<>();
+        log.info("Parsing started");
         for (Category category : all) {
             processed.addAll(categoryProcessor.process(category));
         }
+        log.info("Parsing finished");
 
 //        seminarRepository.setActualFalse();
         List<Seminar> presentSeminars = seminarRepository.findAllByDeletedFalse();
