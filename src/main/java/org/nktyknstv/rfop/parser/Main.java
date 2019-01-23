@@ -2,6 +2,7 @@ package org.nktyknstv.rfop.parser;
 
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -23,10 +24,11 @@ import java.time.LocalDateTime;
 @EnableTransactionManagement
 @Slf4j
 public class Main {
-    public static void main(String[] args) throws IOException {
-        System.out.println("Hello, world!");
-        log.debug("Logger enabled");
 
+    private static String buildVersion;
+
+    public static void main(String[] args) throws IOException {
+        log.debug("Logger enabled");
         File source = new File("rfop-parser.db");
         String backupFileName = "rfop-parser.db." + LocalDateTime.now().toString().replaceAll("[\\s:\\-T]", "_") + ".backup";
         File dest = new File(backupFileName);
@@ -35,6 +37,7 @@ public class Main {
         log.info("Created database backup: {}", backupFileName);
 
         SpringApplication.run(Main.class, args);
+        log.info("Started app, version {}", buildVersion);
     }
 
     @Bean
@@ -51,4 +54,8 @@ public class Main {
         };
     }
 
+    @Value("${build.version}")
+    public void setBuildVersion(String buildVersion) {
+        Main.buildVersion = buildVersion;
+    }
 }
