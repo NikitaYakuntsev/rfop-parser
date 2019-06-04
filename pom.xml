@@ -6,7 +6,7 @@
 
     <groupId>org.nktyknstv</groupId>
     <artifactId>rfop-parser</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <build>
         <resources>
             <resource>
@@ -53,6 +53,8 @@
         <commons-lang3.version>3.8.1</commons-lang3.version>
         <papertrail.version>1.0.0</papertrail.version>
         <guava.version>20.0</guava.version>
+        <java-diff-utils.version>4.0</java-diff-utils.version>
+        <junit.version>4.12</junit.version>
     </properties>
 
     <parent>
@@ -122,6 +124,22 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.java-diff-utils</groupId>
+            <artifactId>java-diff-utils</artifactId>
+            <version>${java-diff-utils.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
         </dependency>
 
 

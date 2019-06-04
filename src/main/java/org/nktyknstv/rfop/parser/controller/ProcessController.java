@@ -9,6 +9,7 @@ import org.nktyknstv.rfop.parser.processor.CategoryProcessor;
 import org.nktyknstv.rfop.parser.repository.CategoryRepository;
 import org.nktyknstv.rfop.parser.repository.InspectionResultRepository;
 import org.nktyknstv.rfop.parser.repository.SeminarRepository;
+import org.nktyknstv.rfop.parser.service.DiffService;
 import org.nktyknstv.rfop.parser.service.InspectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -121,7 +122,7 @@ public class ProcessController {
                     existingSeminar.setActual(true);
                     seminarRepository.save(existingSeminar);
                 } else {
-                    inspectionDescription.append(compareResult).append("\n");
+                    inspectionDescription.append(compareResult).append("<br>");
                     existingSeminar.setCode(seminar.getCode());
                     existingSeminar.setName(seminar.getName());
                     existingSeminar.setCountry(seminar.getCountry());
@@ -163,24 +164,32 @@ public class ProcessController {
         StringBuilder report = new StringBuilder();
 
         if (!existingSeminar.getDate().equals(newSeminar.getDate())) {
-            report.append(String.format("Семинар %s - изменение дат. Было: %s, стало: %s\n", existingSeminar.getUrl(), existingSeminar.getDate(), newSeminar.getDate()));
-        }
-        if (!existingSeminar.getDescription().equals(newSeminar.getDescription())) {
-            report.append(String.format("Семинар %s - изменение описания.\n", existingSeminar.getUrl()));
-        }
-        if (!existingSeminar.getAgenda().equals(newSeminar.getAgenda())) {
-            report.append(String.format("Семинар %s - изменение программы.\n", existingSeminar.getUrl()));
+            report.append(String.format("Семинар <a href='%s'>%s</a> - изменение дат. Было: <b>%s</b>, стало: <b>%s</b><br>",
+                    existingSeminar.getUrl(), existingSeminar.getName(), existingSeminar.getDate(), newSeminar.getDate()));
         }
         if (!existingSeminar.getSpeakers().equals(newSeminar.getSpeakers())) {
-            report.append(String.format("Семинар %s - изменение лекторов. Было: %s, стало: %s\n", existingSeminar.getUrl(), existingSeminar.getSpeakers(), newSeminar.getSpeakers()));
+            report.append(String.format("Семинар <a href='%s'>%s</a> - изменение лекторов. Было: <b>%s</b>, стало: <b>%s</b><br>",
+                    existingSeminar.getUrl(), existingSeminar.getName(), existingSeminar.getSpeakers(), newSeminar.getSpeakers()));
         }
-        return report.toString();
+        if (!existingSeminar.getAgenda().equals(newSeminar.getAgenda())) {
+            String diff = DiffService.calcDiff(existingSeminar.getAgenda(), newSeminar.getAgenda());
+            report.append(String.format("Семинар <a href='%s'>%s</a> - изменение программы.<br>%s<br>",
+                    existingSeminar.getUrl(), existingSeminar.getName(), diff));
+        }
+        if (!existingSeminar.getDescription().equals(newSeminar.getDescription())) {
+            String diff = DiffService.calcDiff(existingSeminar.getDescription(), newSeminar.getDescription());
+            report.append(String.format("Семинар <a href='%s'>%s</a> - изменение описания.<br>%s<br>",
+                    existingSeminar.getUrl(), existingSeminar.getName(), diff));
+        }
+
+        String result = report.toString();
+        return result.isEmpty() ? result : "<hr>" + result + "<hr>";
     }
 
     private String prepareLinksReport(String action, List<Seminar> list) {
-        StringBuilder report = new StringBuilder("\n\n");
+        StringBuilder report = new StringBuilder("<br><br>");
         for (Seminar seminar : list) {
-            report.append(String.format("%s семинар %s (%s)\n", action, seminar.getUrl(), seminar.getName()));
+            report.append(String.format("%s семинар <a href='%s'>%s</a><br>", action, seminar.getUrl(), seminar.getName()));
         }
         return report.toString();
     }
