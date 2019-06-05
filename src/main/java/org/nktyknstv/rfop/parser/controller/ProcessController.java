@@ -164,21 +164,21 @@ public class ProcessController {
         StringBuilder report = new StringBuilder();
 
         if (!existingSeminar.getDate().equals(newSeminar.getDate())) {
-            report.append(String.format("Семинар <a href='%s'>%s</a> - изменение дат. Было: <b>%s</b>, стало: <b>%s</b><br>",
+            report.append(String.format("Семинар <a target='_blank' href='%s'>%s</a> - изменение дат. Было: <b>%s</b>, стало: <b>%s</b><br>",
                     existingSeminar.getUrl(), existingSeminar.getName(), existingSeminar.getDate(), newSeminar.getDate()));
         }
         if (!existingSeminar.getSpeakers().equals(newSeminar.getSpeakers())) {
-            report.append(String.format("Семинар <a href='%s'>%s</a> - изменение лекторов. Было: <b>%s</b>, стало: <b>%s</b><br>",
+            report.append(String.format("Семинар <a target='_blank' href='%s'>%s</a> - изменение лекторов. Было: <b>%s</b>, стало: <b>%s</b><br>",
                     existingSeminar.getUrl(), existingSeminar.getName(), existingSeminar.getSpeakers(), newSeminar.getSpeakers()));
         }
         if (!existingSeminar.getAgenda().equals(newSeminar.getAgenda())) {
             String diff = DiffService.calcDiff(existingSeminar.getAgenda(), newSeminar.getAgenda());
-            report.append(String.format("Семинар <a href='%s'>%s</a> - изменение программы.<br>%s<br>",
+            report.append(String.format("Семинар <a target='_blank' href='%s'>%s</a> - изменение программы.<br>%s<br>",
                     existingSeminar.getUrl(), existingSeminar.getName(), diff));
         }
         if (!existingSeminar.getDescription().equals(newSeminar.getDescription())) {
             String diff = DiffService.calcDiff(existingSeminar.getDescription(), newSeminar.getDescription());
-            report.append(String.format("Семинар <a href='%s'>%s</a> - изменение описания.<br>%s<br>",
+            report.append(String.format("Семинар <a target='_blank' href='%s'>%s</a> - изменение описания.<br>%s<br>",
                     existingSeminar.getUrl(), existingSeminar.getName(), diff));
         }
 
@@ -189,7 +189,7 @@ public class ProcessController {
     private String prepareLinksReport(String action, List<Seminar> list) {
         StringBuilder report = new StringBuilder("<br><br>");
         for (Seminar seminar : list) {
-            report.append(String.format("%s семинар <a href='%s'>%s</a><br>", action, seminar.getUrl(), seminar.getName()));
+            report.append(String.format("%s семинар <a target='_blank' href='%s'>%s</a><br>", action, seminar.getUrl(), seminar.getName()));
         }
         return report.toString();
     }
