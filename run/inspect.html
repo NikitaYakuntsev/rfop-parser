@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<div>
+    <input id="button" type="button" onclick="doInspect();" value="Inspect"/>
+</div>
+<div>
+    <a id="loading"></a>
+</div>
+<div>
+<div id="result"></div>
+</div>
+<script>
+    function doInspect() {
+        jQuery("#button").attr("disabled", "disabled");
+
+        var originalText = "Loading";
+        var i = 0;
+        $("#loading").html(originalText);
+        var interval = setInterval(function () {
+            $("#loading").append(".");
+            i++;
+            if (i == 4) {
+                $("#loading").html(originalText);
+                i = 0;
+            }
+        }, 1000);
+
+        jQuery.ajax({
+            type: "GET",
+            url: "http://localhost:8081/categories/inspect"
+        }).done(function (data) {
+            console.log(data);
+            // jQuery("#result").text("");
+            jQuery("#result").html(data.description);
+            //jQuery("#button").removeAttr("disabled");
+            clearInterval(interval);
+            $("#loading").html("");
+        }).fail(function(err) {
+			jQuery("#result").html("<p>Error!</p>");
+			clearInterval(interval);
+            $("#loading").html("");
+		});
+    }
+
+</script>
+
+</body>
