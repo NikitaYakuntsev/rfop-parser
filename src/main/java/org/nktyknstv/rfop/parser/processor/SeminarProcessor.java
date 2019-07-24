@@ -1,11 +1,11 @@
 package org.nktyknstv.rfop.parser.processor;
 
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.nktyknstv.rfop.parser.entity.BaseEntity;
 import org.nktyknstv.rfop.parser.entity.Seminar;
+import org.nktyknstv.rfop.parser.service.ConnectionService;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ public class SeminarProcessor extends BaseProcessor {
     public List<BaseEntity> process(BaseEntity entity) throws Exception {
         Seminar seminar = ((Seminar) entity);
 
-        Document page = Jsoup.connect(entity.getUrl()).get();
+        Document page = ConnectionService.getPage(entity.getUrl());
 
         seminar.setDescription(getDescription(page));
         seminar.setAgenda(getAgenda(page));

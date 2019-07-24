@@ -3,7 +3,6 @@ package org.nktyknstv.rfop.parser.processor;
 import com.google.common.collect.ImmutableMap;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
@@ -13,6 +12,7 @@ import org.nktyknstv.rfop.parser.entity.BaseEntity;
 import org.nktyknstv.rfop.parser.entity.Category;
 import org.nktyknstv.rfop.parser.entity.Seminar;
 import org.nktyknstv.rfop.parser.repository.SeminarRepository;
+import org.nktyknstv.rfop.parser.service.ConnectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -81,7 +81,8 @@ public class CategoryProcessor extends BaseProcessor {
                 url = String.format(category.getUrl(), pageNum);
             }
 
-            Document page = Jsoup.connect(url).get();
+            Document page = ConnectionService.getPage(url);
+
             if (!getPageNumber(page).equals(pageNum) && pageNum != 0) {
                 break;
             }
