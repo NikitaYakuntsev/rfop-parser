@@ -7,11 +7,11 @@
         <layout class="ch.qos.logback.classic.PatternLayout">
             <pattern>%-5level %logger{35}: %m%n%xEx</pattern>
         </layout>
-        <syslogConfig class="org.productivity.java.syslog4j.impl.net.tcp.ssl.SSLTCPNetSyslogConfig">
+        <syslogConfig class="org.productivity.java.syslog4j.impl.net.udp.UDPNetSyslogConfig">
             <!-- remote system to log to -->
-            <host>logs7.papertrailapp.com</host>
+            <host>logs.papertrailapp.com</host>
             <!-- remote port to log to -->
-            <port>38098</port>
+            <port>23855</port>
             <!-- program name to log as -->
             <ident>rfop-parser</ident>
             <!-- max log message length in bytes -->
@@ -53,6 +53,7 @@
 
     <root level="INFO">
         <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
         <appender-ref ref="PAPERTRAIL"/>
     </root>
 
