@@ -49,7 +49,7 @@
         <lombok.version>1.18.4</lombok.version>
         <sqlite-jdbc.version>3.25.2</sqlite-jdbc.version>
         <sqlite-dialect.version>1.0</sqlite-dialect.version>
-        <jsoup.version>1.7.2</jsoup.version>
+        <jsoup.version>1.15.3</jsoup.version>
         <commons-lang3.version>3.8.1</commons-lang3.version>
         <papertrail.version>1.0.0</papertrail.version>
         <guava.version>20.0</guava.version>
